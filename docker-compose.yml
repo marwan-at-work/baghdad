@@ -1,0 +1,35 @@
+version: '3'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: api/docker/dev.dockerfile
+    volumes:
+      - ".:/go/src/github.com/marwan-at-work/baghdad"
+      - "./.env:/run/secrets/baghdad-vars"
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+    depends_on:
+      - rabbitmq
+    ports:
+      - "3000:3000"
+
+  build-sync:
+    build:
+      context: .
+      dockerfile: worker/build-sync/docker/dev.dockerfile
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+    volumes:
+      - ".:/go/src/github.com/marwan-at-work/baghdad"
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3.6.9-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=baghdad
+      - RABBITMQ_DEFAULT_PASS=dev
+    ports:
+      - '8080:15672'
+      - '5672:5672'

@@ -1,0 +1,28 @@
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/BurntSushi/toml"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/docker/docker"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/google/go-github"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/gorilla/mux"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/joho/godotenv"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/streadway/amqp"
+
+[[dependencies]]
+  branch = "master"
+  name = "golang.org/x/oauth2"

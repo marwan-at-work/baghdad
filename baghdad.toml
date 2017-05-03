@@ -1,4 +1,4 @@
-title = "baghdad"
+project = "baghdad"
 
 [[services]]
 name = "api"

@@ -2,7 +2,7 @@ package baghdad
 
 // Baghdad top level config
 type Baghdad struct {
-	Title        string            `toml:"title"`
+	Project      string            `toml:"project"`
 	Services     []Service         `toml:"services"`
 	Environments map[string]string `toml:"environments"`
 	Branches     map[string]Branch `toml:"branches"`

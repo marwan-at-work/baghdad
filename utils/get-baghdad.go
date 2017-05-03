@@ -9,7 +9,7 @@ import (
 )
 
 // GetBaghdad takes a github client, a sha, and returns the corresponding baghdad.toml file.
-func GetBaghdad(c *github.Client, opts GetBaghdadOpts) (v baghdad.Baghdad, err error) {
+func GetBaghdad(c *github.Client, opts GetBaghdadOpts) (b baghdad.Baghdad, err error) {
 	f, _, _, err := c.Repositories.GetContents(
 		opts.Ctx,
 		opts.Owner,
@@ -28,9 +28,9 @@ func GetBaghdad(c *github.Client, opts GetBaghdadOpts) (v baghdad.Baghdad, err e
 		return
 	}
 
-	b := baghdad.Baghdad{}
-
+	b = baghdad.Baghdad{}
 	_, err = toml.Decode(str, &b)
+
 	return
 }
 

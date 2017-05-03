@@ -1,8 +1,9 @@
 package handlers
 
 import (
+	"bytes"
 	"context"
-	"encoding/json"
+	"encoding/gob"
 	"fmt"
 	"net/http"
 	"os"
@@ -128,9 +129,11 @@ func pullValid(pre *github.PullRequestEvent) bool {
 }
 
 func sendBuildJob(b bus.Publisher, bj baghdad.BuildJob) {
-	j, _ := json.Marshal(bj)
+	var buf bytes.Buffer
+	enc := gob.NewEncoder(&buf)
+	enc.Encode(bj)
 
-	b.Publish("build-sync", j)
+	b.Publish("build-sync", buf.Bytes())
 }
 
 func getBranchFromRef(s string) string {
