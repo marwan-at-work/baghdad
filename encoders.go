@@ -32,3 +32,17 @@ func EncodeBuildEvent(be BuildEvent) (p []byte, err error) {
 
 	return
 }
+
+// EncodeDeployJob is used to serialize a BuildEvent to a rabbitmq msg
+func EncodeDeployJob(dj DeployJob) (p []byte, err error) {
+	var buf bytes.Buffer
+	enc := gob.NewEncoder(&buf)
+	err = enc.Encode(dj)
+	if err != nil {
+		return
+	}
+
+	p = buf.Bytes()
+
+	return
+}

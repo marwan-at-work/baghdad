@@ -27,11 +27,11 @@ isExposed = false
 # name = "deploy-worker"
 # isExposed = false
 #
-# [[services]]
-# dockerfile = "worker/event-worker/docker/builder.dockerfile"
-# name = "event-worker"
-# isExposed = false
-#
+[[services]]
+dockerfile = "worker/event-worker/docker/builder.dockerfile"
+name = "event-worker"
+isExposed = false
+
 # [[services]]
 # dockerfile = "worker/post-deploy/docker/builder.dockerfile"
 # name = "post-deploy"

@@ -38,6 +38,16 @@ services:
     depends_on:
       - rabbitmq
 
+  event-worker:
+    build:
+      context: .
+      dockerfile: worker/event-worker/docker/dev.dockerfile
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+    volumes:
+      - ".:/go/src/github.com/marwan-at-work/baghdad"
+    depends_on:
+      - rabbitmq
 
   rabbitmq:
     image: rabbitmq:3.6.9-management

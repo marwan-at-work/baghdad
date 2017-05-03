@@ -15,3 +15,14 @@ func DecodeBuildJob(p []byte) (bj BuildJob, err error) {
 
 	return
 }
+
+// DecodeBuildEvent is used to parse a BuildJob from a rabbitmq msg
+func DecodeBuildEvent(p []byte) (be BuildEvent, err error) {
+	be = BuildEvent{}
+
+	buf := bytes.NewBuffer(p)
+	dec := gob.NewDecoder(buf)
+	err = dec.Decode(&be)
+
+	return
+}
