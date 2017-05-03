@@ -28,3 +28,13 @@ type SecretsJob struct {
 	SecretName  string
 	SecretBody  []byte
 }
+
+// PostDeployJob use to send a post deploy job to rabbitmq
+type PostDeployJob struct {
+	Baghdad     Baghdad
+	ProjectName string
+	Tag         string
+	Env         string
+	BranchName  string
+	SiteURL     string
+}

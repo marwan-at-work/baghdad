@@ -16,17 +16,17 @@ dockerfile = "worker/build-worker/docker/builder.dockerfile"
 name = "build-worker"
 isExposed = false
 
-#
-# [[services]]
-# dockerfile = "worker/deploy-sync/docker/builder.dockerfile"
-# name = "deploy-sync"
-# isExposed = false
-#
-# [[services]]
-# dockerfile = "worker/deploy-worker/docker/builder.dockerfile"
-# name = "deploy-worker"
-# isExposed = false
-#
+
+[[services]]
+dockerfile = "worker/deploy-sync/docker/builder.dockerfile"
+name = "deploy-sync"
+isExposed = false
+
+[[services]]
+dockerfile = "worker/deploy-worker/docker/builder.dockerfile"
+name = "deploy-worker"
+isExposed = false
+
 [[services]]
 dockerfile = "worker/event-worker/docker/builder.dockerfile"
 name = "event-worker"
@@ -48,8 +48,9 @@ isExposed = false
 # isExposed = false
 
 [[services]]
-image = "rabbitmq:3.6.9-management"
+name = "rabbitmq"
 isExternal = true
+image = "rabbitmq:3.6.9-management"
 isExposed = true
 port = "15672"
 

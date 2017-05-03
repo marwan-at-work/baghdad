@@ -16,13 +16,35 @@ func DecodeBuildJob(p []byte) (bj BuildJob, err error) {
 	return
 }
 
-// DecodeBuildEvent is used to parse a BuildJob from a rabbitmq msg
+// DecodeBuildEvent is used to parse a BuildEvent from a rabbitmq msg
 func DecodeBuildEvent(p []byte) (be BuildEvent, err error) {
 	be = BuildEvent{}
 
 	buf := bytes.NewBuffer(p)
 	dec := gob.NewDecoder(buf)
 	err = dec.Decode(&be)
+
+	return
+}
+
+// DecodeDeployJob is used to parse a DeployJob from a rabbitmq msg
+func DecodeDeployJob(p []byte) (dj DeployJob, err error) {
+	dj = DeployJob{}
+
+	buf := bytes.NewBuffer(p)
+	dec := gob.NewDecoder(buf)
+	err = dec.Decode(&dj)
+
+	return
+}
+
+// DecodePostDeployJob is used to parse a DeployJob from a rabbitmq msg
+func DecodePostDeployJob(p []byte) (pdj PostDeployJob, err error) {
+	pdj = PostDeployJob{}
+
+	buf := bytes.NewBuffer(p)
+	dec := gob.NewDecoder(buf)
+	err = dec.Decode(&pdj)
 
 	return
 }
