@@ -6,5 +6,6 @@ func getRequiredVars() []string {
 		"ADMIN_TOKEN",
 		"DOCKER_AUTH_USER",
 		"DOCKER_AUTH_PASS",
+		"DOCKER_ORG",
 	}
 }
