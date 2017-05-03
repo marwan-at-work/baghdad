@@ -51,6 +51,7 @@ func pushImage(ctx context.Context, opts *pushImageOpts) (err error) {
 	err = jsonmessage.DisplayJSONMessagesStream(resp, opts.stdout, fd, isTerm, nil)
 	if err != nil {
 		fmt.Println("could not display output")
+		err = nil
 	}
 	return
 }

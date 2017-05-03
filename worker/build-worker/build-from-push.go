@@ -177,6 +177,7 @@ func buildFromPush(b baghdad.BuildJob, w *worker.Worker) (tag string, err error)
 	if err != nil {
 		cancel()
 		updateGithubStatus(o, r, sha, "error")
+		w.Log(err.Error())
 		return nextTag, err
 	}
 
