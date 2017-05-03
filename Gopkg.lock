@@ -1,4 +1,4 @@
-memo = "4188528b5232388042761361995aa4978c9f477cf802c5ba40a5aed7577cf596"
+memo = "6e032e423676d3495a8f73106fa9e0af3dfa6c5648ac021df65e0d3933ae835c"
 
 [[projects]]
   branch = "master"
@@ -59,6 +59,12 @@ memo = "4188528b5232388042761361995aa4978c9f477cf802c5ba40a5aed7577cf596"
   name = "github.com/docker/libtrust"
   packages = ["."]
   revision = "aabc10ec26b754e797f9028f4589c5b7bd90dc20"
+
+[[projects]]
+  name = "github.com/go-redis/redis"
+  packages = [".","internal","internal/consistenthash","internal/hashtag","internal/pool","internal/proto"]
+  revision = "d371792f33b2c2e6747674b87be1f069aef21778"
+  version = "v6.3.1"
 
 [[projects]]
   branch = "master"
@@ -191,3 +197,9 @@ memo = "4188528b5232388042761361995aa4978c9f477cf802c5ba40a5aed7577cf596"
   name = "gopkg.in/warnings.v0"
   packages = ["."]
   revision = "8a331561fe74dadba6edfc59f3be66c22c3b065d"
+
+[[projects]]
+  branch = "v2"
+  name = "gopkg.in/yaml.v2"
+  packages = ["."]
+  revision = "cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b"
