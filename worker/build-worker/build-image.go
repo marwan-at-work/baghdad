@@ -41,7 +41,8 @@ func buildImage(ctx context.Context, opts *buildImgOpts) (err error) {
 	fd, isTerm := term.GetFdInfo(opts.stdout)
 	err = jsonmessage.DisplayJSONMessagesStream(resp.Body, opts.stdout, fd, isTerm, nil)
 	if err != nil {
-		fmt.Println("could not display docker build output, process running though.")
+		fmt.Println("could not display docker build output, process running though.", err)
+		err = nil
 	}
 
 	return
