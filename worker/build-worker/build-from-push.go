@@ -70,11 +70,13 @@ func buildFromPush(b baghdad.BuildJob, w *worker.Worker) (tag string, err error)
 	repoPath := getRepoPath(r, strconv.Itoa(b.Type))
 	errChan := make(chan error)
 
+	internalServices := 0
 	for _, service := range b.Baghdad.Services {
 		if service.IsExternal {
 			continue
 		}
 
+		internalServices++
 		go func(service baghdad.Service) {
 			imgName := fmt.Sprintf("%v/%v-%v:%v", dockerOrg, r, service.Name, nextTag)
 			er := buildImage(ctx, &buildImgOpts{
@@ -161,7 +163,7 @@ func buildFromPush(b baghdad.BuildJob, w *worker.Worker) (tag string, err error)
 		}(service)
 	}
 
-	for i := 0; i < len(b.Baghdad.Services); i++ {
+	for i := 0; i < internalServices; i++ {
 		select {
 		case err = <-errChan:
 			if err != nil {
