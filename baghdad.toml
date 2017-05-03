@@ -7,39 +7,45 @@ isExposed = true
 port = "3000"
 
 [[services]]
-dockerfile = "worker/build-worker/docker/builder.dockerfile"
+dockerfile = "worker/build-sync/docker/builder.dockerfile"
 name = "build-worker"
 isExposed = false
 
 [[services]]
-dockerfile = "worker/deploy-sync/docker/builder.dockerfile"
-name = "deploy-sync"
+dockerfile = "worker/build-worker/docker/builder.dockerfile"
+name = "build-worker"
 isExposed = false
 
-[[services]]
-dockerfile = "worker/deploy-worker/docker/builder.dockerfile"
-name = "deploy-worker"
-isExposed = false
-
-[[services]]
-dockerfile = "worker/event-worker/docker/builder.dockerfile"
-name = "event-worker"
-isExposed = false
-
-[[services]]
-dockerfile = "worker/post-deploy/docker/builder.dockerfile"
-name = "post-deploy"
-isExposed = false
-
-[[services]]
-dockerfile = "worker/secrets-worker/docker/builder.dockerfile"
-name = "secrets-worker"
-isExposed = false
-
-[[services]]
-dockerfile = "test/docker/builder.dockerfile"
-name = "baghdad-test"
-isExposed = false
+#
+# [[services]]
+# dockerfile = "worker/deploy-sync/docker/builder.dockerfile"
+# name = "deploy-sync"
+# isExposed = false
+#
+# [[services]]
+# dockerfile = "worker/deploy-worker/docker/builder.dockerfile"
+# name = "deploy-worker"
+# isExposed = false
+#
+# [[services]]
+# dockerfile = "worker/event-worker/docker/builder.dockerfile"
+# name = "event-worker"
+# isExposed = false
+#
+# [[services]]
+# dockerfile = "worker/post-deploy/docker/builder.dockerfile"
+# name = "post-deploy"
+# isExposed = false
+#
+# [[services]]
+# dockerfile = "worker/secrets-worker/docker/builder.dockerfile"
+# name = "secrets-worker"
+# isExposed = false
+#
+# [[services]]
+# dockerfile = "test/docker/builder.dockerfile"
+# name = "baghdad-test"
+# isExposed = false
 
 [[services]]
 image = "rabbitmq:3.6.9-management"

@@ -21,8 +21,16 @@
 
 [[dependencies]]
   branch = "master"
+  name = "github.com/marwan-at-work/dfparser"
+
+[[dependencies]]
+  branch = "master"
   name = "github.com/streadway/amqp"
 
 [[dependencies]]
   branch = "master"
   name = "golang.org/x/oauth2"
+
+[[dependencies]]
+  branch = "v4"
+  name = "gopkg.in/src-d/go-git.v4"

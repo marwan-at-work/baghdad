@@ -25,6 +25,20 @@ services:
     depends_on:
       - rabbitmq
 
+  build-worker:
+    build:
+      context: .
+      dockerfile: worker/build-worker/docker/dev.dockerfile
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+    volumes:
+      - ".:/go/src/github.com/marwan-at-work/baghdad"
+      - /var/run/docker.sock:/var/run/docker.sock
+      - "./.env:/run/secrets/baghdad-vars"
+    depends_on:
+      - rabbitmq
+
+
   rabbitmq:
     image: rabbitmq:3.6.9-management
     environment:

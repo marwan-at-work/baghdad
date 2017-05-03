@@ -1,4 +1,4 @@
-memo = "aaa1b0f9f10f7bdb1b514bd9a7ca8c129548b06b623a5fee860c813cb65e0b4e"
+memo = "4188528b5232388042761361995aa4978c9f477cf802c5ba40a5aed7577cf596"
 
 [[projects]]
   branch = "master"
@@ -32,14 +32,20 @@ memo = "aaa1b0f9f10f7bdb1b514bd9a7ca8c129548b06b623a5fee860c813cb65e0b4e"
 
 [[projects]]
   branch = "master"
+  name = "github.com/docker/distribution"
+  packages = ["digestset","reference"]
+  revision = "c3e06c6069653bf72034ed907d6749d3928fdacb"
+
+[[projects]]
+  branch = "master"
   name = "github.com/docker/docker"
-  packages = ["api/types","api/types/blkiodev","api/types/container","api/types/filters","api/types/mount","api/types/network","api/types/registry","api/types/strslice","api/types/swarm","api/types/versions","builder/dockerignore","cli/command/image/build","pkg/archive","pkg/fileutils","pkg/gitutils","pkg/httputils","pkg/idtools","pkg/ioutils","pkg/jsonlog","pkg/jsonmessage","pkg/longpath","pkg/pools","pkg/progress","pkg/promise","pkg/streamformatter","pkg/symlink","pkg/system","pkg/term","pkg/term/windows","pkg/urlutil"]
+  packages = ["api","api/types","api/types/blkiodev","api/types/container","api/types/events","api/types/filters","api/types/image","api/types/mount","api/types/network","api/types/registry","api/types/strslice","api/types/swarm","api/types/time","api/types/versions","api/types/volume","builder/dockerignore","cli/command/image/build","client","pkg/archive","pkg/fileutils","pkg/gitutils","pkg/httputils","pkg/idtools","pkg/ioutils","pkg/jsonlog","pkg/jsonmessage","pkg/longpath","pkg/pools","pkg/progress","pkg/promise","pkg/streamformatter","pkg/symlink","pkg/system","pkg/term","pkg/term/windows","pkg/tlsconfig","pkg/urlutil"]
   revision = "e1101b1295f05ef3c6f1a684a51cd508b3c7874c"
 
 [[projects]]
   branch = "master"
   name = "github.com/docker/go-connections"
-  packages = ["nat"]
+  packages = ["nat","sockets","tlsconfig"]
   revision = "e15c02316c12de00874640cd76311849de2aeed5"
 
 [[projects]]
@@ -47,6 +53,12 @@ memo = "aaa1b0f9f10f7bdb1b514bd9a7ca8c129548b06b623a5fee860c813cb65e0b4e"
   name = "github.com/docker/go-units"
   packages = ["."]
   revision = "0dadbb0345b35ec7ef35e228dabb8de89a65bf52"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/docker/libtrust"
+  packages = ["."]
+  revision = "aabc10ec26b754e797f9028f4589c5b7bd90dc20"
 
 [[projects]]
   branch = "master"
@@ -85,6 +97,18 @@ memo = "aaa1b0f9f10f7bdb1b514bd9a7ca8c129548b06b623a5fee860c813cb65e0b4e"
   revision = "325433c502d409f3c3dc820098fb0cfe38d98dc7"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/marwan-at-work/dfparser"
+  packages = ["."]
+  revision = "9326e7a95b2f867e474063de46481177196a0077"
+
+[[projects]]
+  name = "github.com/opencontainers/go-digest"
+  packages = ["."]
+  revision = "aa2ec055abd10d26d539eb630a92241b781ce4bc"
+  version = "v1.0.0-rc0"
+
+[[projects]]
   name = "github.com/opencontainers/runc"
   packages = ["libcontainer/system","libcontainer/user"]
   revision = "baf6536d6259209c3edfa2b22237af82942d3dfa"
@@ -98,14 +122,32 @@ memo = "aaa1b0f9f10f7bdb1b514bd9a7ca8c129548b06b623a5fee860c813cb65e0b4e"
 
 [[projects]]
   branch = "master"
+  name = "github.com/sergi/go-diff"
+  packages = ["diffmatchpatch"]
+  revision = "feef008d51ad2b3778f85d387ccf91735543008d"
+
+[[projects]]
+  branch = "v1"
+  name = "github.com/src-d/gcfg"
+  packages = [".","scanner","token","types"]
+  revision = "f187355171c936ac84a82793659ebb4936bc1c23"
+
+[[projects]]
+  branch = "master"
   name = "github.com/streadway/amqp"
   packages = ["."]
   revision = "afe8eee29a74d213b1f3fb2586058157c397da60"
 
 [[projects]]
   branch = "master"
+  name = "golang.org/x/crypto"
+  packages = ["curve25519","ed25519","ed25519/internal/edwards25519","ssh","ssh/agent"]
+  revision = "12c985af8526c1f6f0c463bbfd9d69623d13b323"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/net"
-  packages = ["context"]
+  packages = ["context","context/ctxhttp","proxy"]
   revision = "5602c733f70afc6dcec6766be0d5034d4c4f14de"
 
 [[projects]]
@@ -131,3 +173,21 @@ memo = "aaa1b0f9f10f7bdb1b514bd9a7ca8c129548b06b623a5fee860c813cb65e0b4e"
   packages = [".","internal","internal/app_identity","internal/base","internal/datastore","internal/log","internal/modules","internal/remote_api","internal/urlfetch","urlfetch"]
   revision = "150dc57a1b433e64154302bdc40b6bb8aefa313a"
   version = "v1.0.0"
+
+[[projects]]
+  branch = "master"
+  name = "gopkg.in/src-d/go-billy.v2"
+  packages = [".","osfs"]
+  revision = "0f02306b1aa8fe9ed04feb409ceffedc568fa2a4"
+
+[[projects]]
+  branch = "v4"
+  name = "gopkg.in/src-d/go-git.v4"
+  packages = [".","config","internal/revision","plumbing","plumbing/cache","plumbing/filemode","plumbing/format/config","plumbing/format/idxfile","plumbing/format/index","plumbing/format/objfile","plumbing/format/packfile","plumbing/format/pktline","plumbing/object","plumbing/protocol/packp","plumbing/protocol/packp/capability","plumbing/protocol/packp/sideband","plumbing/revlist","plumbing/storer","plumbing/transport","plumbing/transport/client","plumbing/transport/file","plumbing/transport/git","plumbing/transport/http","plumbing/transport/internal/common","plumbing/transport/server","plumbing/transport/ssh","storage","storage/filesystem","storage/filesystem/internal/dotgit","storage/memory","utils/binary","utils/diff","utils/ioutil","utils/merkletrie","utils/merkletrie/internal/frame","utils/merkletrie/noder"]
+  revision = "36c78b9d1b1eea682703fb1cbb0f4f3144354389"
+
+[[projects]]
+  branch = "master"
+  name = "gopkg.in/warnings.v0"
+  packages = ["."]
+  revision = "8a331561fe74dadba6edfc59f3be66c22c3b065d"
