@@ -161,10 +161,15 @@ func buildFromPush(b baghdad.BuildJob, w *worker.Worker) (tag string, err error)
 		}(service)
 	}
 
-	select {
-	case err = <-errChan:
-	case <-time.After(time.Minute * 5):
-		err = errors.New("building services timed out")
+	for i := 0; i < len(b.Baghdad.Services); i++ {
+		select {
+		case err = <-errChan:
+			if err != nil {
+				break
+			}
+		case <-time.After(time.Minute * 5):
+			err = errors.New("building services timed out")
+		}
 	}
 
 	if err != nil {
