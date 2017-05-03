@@ -8,7 +8,7 @@ port = "3000"
 
 [[services]]
 dockerfile = "worker/build-sync/docker/builder.dockerfile"
-name = "build-worker"
+name = "build-sync"
 isExposed = false
 
 [[services]]
