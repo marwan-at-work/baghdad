@@ -1,0 +1,92 @@
+# [required] Project name is mandatory. Must be unique and the same as the repo name.
+project = "baghdad"
+# [optional] if post, Baghdad will post messages to the slack channel regarding build/deploy events.
+slack-url = "https://hooks.slack.com/services/XXXRN8XXX/XXX4U24XX/XXXXW6RXIfsreaqtsXXXXXXX"
+
+# You can specify every microservice within your repository with the [[services]] configuration. 
+[[services]]
+# [required] The service name must be unique, because it is what ends up getting built and/or deployed. 
+name = "api"
+# [required] The path to which a Dockerfile exists that is responsible for building this service.
+dockerfile = "api/docker/builder.dockerfile"
+# [optional] If you want this service to be deployed as well exposed to the public through the subdomain
+# you must set isExposed to true as well as a specific port below.
+isExposed = true
+# [required-if] only isExposed is set to true. Must match the port to which your serivce is listening on.
+port = "3000"
+
+# This is an example of another service in your repo with different configs.
+# Note that this "is not exposed" meaning that Baghdad will not route a subdomain 
+# directly to this service. You can use this type of service for things like databases, 
+# or backends where you want other services in your stack to reach it, but not the entire world. 
+[[services]]
+name = "build-sync"
+dockerfile = "worker/build-sync/docker/builder.dockerfile"
+isExposed = false
+
+# This service is never deployed, only because it does not exist in stack-compose.yml file. 
+# However, it is built, and some of the built files are pushed as artifacts to the Github release 
+# attachments. 
+[[services]]
+name = "cli"
+dockerfile = "cli/docker/builder.dockerfile"
+isExposed = false
+# [optional] if true, it will tell Baghdad that a certain path within the built image 
+# needs to be extracted and pushed to the Github release as a tar attachment. 
+hasArtifacts = true
+# [required-if] hasARtifacts is set to true. Can be a path to a directory or a file. 
+artifactsPath = "/go/src/github.com/marwan-at-work/baghdad/cli/baghdad"
+
+# This service uses an external image that never gets built by Baghdad. You can use any image from Dockerhub
+# or other image repositories. Say you want rabbitmq to run within your stack, you wouldn't need this configuration. 
+# You can just add rabbitmq as a service to stack-compose.yml. However, if you want to access this image 
+# from the outside world, as rabbitmq exposes a web interface, use the config below to create a subdomain for it.
+[[services]]
+name = "rabbitmq"
+isExternal = true
+image = "rabbitmq:3.6.9-management"
+isExposed = true
+port = "15672"
+
+# This is required for deployment. Specify the environments to which you'd like to deploy your project.
+# The syntax is <environment-name>=<environment-config> where you only have two options for 
+# <environment-config>: "manual" or "auto"
+[environments]
+# auto means that Baghdad will automatically trigger a deploy after a successful build. 
+cd = "auto"
+# manual means that your service will only get built and you'd have to manually deploy it 
+# with the bag cli: `bag deploy --env qa --tag <tag> --branch <branch>. 
+qa = "manual"
+
+# branches is a dictionary where the keys are the branches you'd like Baghdad to track, and the value is an 
+# object for special config for that branch. Currently, the only config you have is "version".
+[branches]
+# here, we are saying that only trigger builds for the master branch. If you ever push anything
+# to another branch, Baghdad will not do anything. Note, that all Pull Requests are built.
+[branches.master]
+# version specifies the current version of your app. This is part of the constructed tagging that Baghdad
+# creates in your Github releases: master-0.0.1-Build.3
+version = "0.0.1"
+
+
+# A post-deploy config is an optional feature where you can trigger an action after your project has 
+# successfully been deployed. A common use case for this, is that you want to run blackbox testing 
+# against something that just got deployed. For example, using selenium tests against a deployde web UI. 
+# The post-deploy service, upon running, will receive the following environment variables:
+# SITE_URL, PROJECT_NAME, DEPLOYED_TAG, DEPLOYED_ENV, BRANCH_NAME
+
+[post-deploy]
+# [required] The source-service is the actual Dockerimage in this config file that will get run.
+# Therefore you will have to have another [[services]] object with the name set to "test" in this case. 
+source-service = "test"
+# [required] The target-service, is used only for the sake of giving the source-service the fully deployed URL 
+# as an environment variable: SITE_URL
+target-service = "api"
+# [required] post-deploy will only run if one of the enviornments inside this array is being deployed. 
+environments = [
+  "qa"
+]
+# [optionsl] use this to give swarm-secrets access to your post-deploy service. 
+# the name of the secret here will be the environment variable key, while the value 
+# of that environment variable will be the actual secret content. 
+secrets = "baghdad-vars"

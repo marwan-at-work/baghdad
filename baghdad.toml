@@ -1,0 +1,79 @@
+project = "baghdad"
+slack-url = "https://hooks.slack.com/services/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"
+
+[[services]]
+name = "api"
+dockerfile = "api/docker/builder.dockerfile"
+isExposed = true
+port = "3000"
+
+[[services]]
+name = "build-sync"
+dockerfile = "worker/build-sync/docker/builder.dockerfile"
+isExposed = false
+
+[[services]]
+name = "build-worker"
+dockerfile = "worker/build-worker/docker/builder.dockerfile"
+isExposed = false
+
+[[services]]
+name = "deploy-sync"
+dockerfile = "worker/deploy-sync/docker/builder.dockerfile"
+isExposed = false
+
+[[services]]
+name = "event-worker"
+dockerfile = "worker/event-worker/docker/builder.dockerfile"
+isExposed = false
+
+[[services]]
+name = "post-deploy"
+dockerfile = "worker/post-deploy/docker/builder.dockerfile"
+isExposed = false
+
+[[services]]
+name = "secrets-worker"
+dockerfile = "worker/secrets-worker/docker/builder.dockerfile"
+isExposed = false
+
+[[services]]
+name = "docker-sweeper"
+dockerfile = "worker/docker-sweeper/docker/builder.dockerfile"
+isExposed = false
+
+[[services]]
+name = "cli"
+dockerfile = "cli/docker/builder.dockerfile"
+isExposed = false
+hasArtifacts = true
+artifactsPath = "/go/src/github.com/marwan-at-work/baghdad/cli/baghdad"
+
+# [[services]]
+# dockerfile = "test/docker/builder.dockerfile"
+# name = "baghdad-test"
+# isExposed = false
+
+[[services]]
+name = "rabbitmq"
+isExternal = true
+image = "rabbitmq:3.6.9-management"
+isExposed = true
+port = "15672"
+
+[environments]
+cd = "auto"
+qa = "manual"
+
+[branches]
+
+[branches.master]
+version = "0.0.1"
+
+
+# [post-deploy]
+# source-service = "test"
+# target-service = "api"
+# environments = [
+#   "qa"
+# ]

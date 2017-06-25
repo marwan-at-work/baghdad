@@ -1,0 +1,163 @@
+version: '3.2'
+services:
+  api:
+    image: menice/baghdad-api
+    secrets:
+      - baghdad-vars
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 10s
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+    networks:
+      - default
+
+  build-sync:
+    image: menice/baghdad-build-sync
+    secrets:
+      - baghdad-vars
+    environment:
+      - BUILDER_ADDR=build-worker:50051
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 10s
+    networks:
+      - default
+
+  build-worker:
+    image: menice/baghdad-build-worker
+    secrets:
+      - baghdad-vars
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+      - LOG_LEVEL=DEBUG
+      - REDIS_URL=redis:6379
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 10s
+    networks:
+      - default
+
+  deploy-sync:
+    image: menice/baghdad-deploy-sync
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+      - POST_DEPLOY_ADDR=post-deploy:50051
+      - REDIS_URL=redis:6379
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 10s
+    networks:
+      - default
+    secrets:
+      - baghdad-vars
+
+  event-worker:
+    image: menice/baghdad-event-worker
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+      - REDIS_URL=redis:6379
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 10s
+    networks:
+      - default
+
+  post-deploy:
+    image: menice/baghdad-post-deploy
+    secrets:
+      - baghdad-vars
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+      - SECRET_ADDR=secrets-worker:50051
+      - REDIS_URL=redis:6379
+    networks:
+      - default
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  secrets-worker:
+    image: menice/baghdad-secrets-worker
+    secrets:
+      - baghdad-vars
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+      - REDIS_URL=redis:6379
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 10s
+    networks:
+      - default
+
+  docker-sweeper:
+    image: menice/baghdad-docker-sweeper
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+      - REDIS_URL=redis:6379
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 10s
+    networks:
+      - default
+
+  rabbitmq:
+    image: rabbitmq:3.6.9-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=baghdad
+      - RABBITMQ_DEFAULT_PASS=dev
+    networks:
+      - default
+
+  redis:
+    image: redis
+    command: redis-server --appendonly yes --port 6379
+    networks:
+      - default
+
+secrets:
+  baghdad-vars:
+    external: true
+
+networks:
+  default:

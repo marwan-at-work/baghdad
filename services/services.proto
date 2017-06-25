@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+service ServiceBuilder {
+  rpc ServiceBuild (BuildRequest) returns (stream BuildResponse) {}
+}
+
+message BuildRequest {
+  bytes msg = 1;
+}
+
+message BuildResponse {
+  bytes artifacts = 1;
+}
+
+service PostDeploy {
+  rpc Run (PostDeployRequest) returns (PostDeployResponse) {}
+}
+
+message PostDeployRequest {
+  bytes msg = 1;
+}
+
+message PostDeployResponse {}
+
+service Secret {
+  rpc Get (SecretRequest) returns (SecretResponse) {}
+}
+
+message SecretRequest {
+  string name = 1;
+}
+
+message SecretResponse {
+  bytes data = 1;
+  bool exists = 2;
+}

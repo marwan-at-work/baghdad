@@ -1,0 +1,138 @@
+version: '3'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: api/docker/dev.dockerfile
+    volumes:
+      - ".:/go/src/github.com/marwan-at-work/baghdad"
+      - "./.env:/run/secrets/baghdad-vars"
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+      - REDIS_URL=redis:6379
+    depends_on:
+      - rabbitmq
+      - redis
+    ports:
+      - "3000:3000"
+
+  build-sync:
+    build:
+      context: .
+      dockerfile: worker/build-sync/docker/dev.dockerfile
+    environment:
+      - BUILDER_ADDR=build-worker:50051
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+      - LOG_LEVEL=DEBUG
+      - REDIS_URL=redis:6379
+    volumes:
+      - ".:/go/src/github.com/marwan-at-work/baghdad"
+      - "./.env:/run/secrets/baghdad-vars"
+    depends_on:
+      - rabbitmq
+      - redis
+
+  build-worker:
+    build:
+      context: .
+      dockerfile: worker/build-worker/docker/dev.dockerfile
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+      - LOG_LEVEL=DEBUG
+      - REDIS_URL=redis:6379
+    volumes:
+      - ".:/go/src/github.com/marwan-at-work/baghdad"
+      - /var/run/docker.sock:/var/run/docker.sock
+      - "./.env:/run/secrets/baghdad-vars"
+    depends_on:
+      - rabbitmq
+      - redis
+
+  deploy-sync:
+    build:
+      context: .
+      dockerfile: worker/deploy-sync/docker/dev.dockerfile
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+      - LOG_LEVEL=DEBUG
+      - POST_DEPLOY_ADDR=post-deploy:50051
+      - REDIS_URL=redis:6379
+    volumes:
+      - ".:/go/src/github.com/marwan-at-work/baghdad"
+      - "./.env:/run/secrets/baghdad-vars"
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - rabbitmq
+      - redis
+
+  post-deploy:
+    build:
+      context: .
+      dockerfile: worker/post-deploy/docker/dev.dockerfile
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+      - LOG_LEVEL=DEBUG
+      - REDIS_URL=redis:6379
+      - SECRET_ADDR=secrets-worker:50051
+    volumes:
+      - ".:/go/src/github.com/marwan-at-work/baghdad"
+      - "./.env:/run/secrets/baghdad-vars"
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - rabbitmq
+      - redis
+
+  secrets-worker:
+    build:
+      context: .
+      dockerfile: worker/secrets-worker/docker/dev.dockerfile
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+      - LOG_LEVEL=DEBUG
+      - REDIS_URL=redis:6379
+    volumes:
+      - ".:/go/src/github.com/marwan-at-work/baghdad"
+      - "./.env:/run/secrets/baghdad-vars"
+    depends_on:
+      - rabbitmq
+      - redis
+
+  event-worker:
+    build:
+      context: .
+      dockerfile: worker/event-worker/docker/dev.dockerfile
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+      - LOG_LEVEL=DEBUG
+      - REDIS_URL=redis:6379
+    volumes:
+      - ".:/go/src/github.com/marwan-at-work/baghdad"
+    depends_on:
+      - rabbitmq
+      - redis
+
+  docker-sweeper:
+    build:
+      context: .
+      dockerfile: worker/docker-sweeper/docker/dev.dockerfile
+    volumes:
+      - ".:/go/src/github.com/marwan-at-work/baghdad"
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
+      - REDIS_URL=redis:6379
+    depends_on:
+      - redis
+
+  rabbitmq:
+    image: rabbitmq:3.6.9-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=baghdad
+      - RABBITMQ_DEFAULT_PASS=dev
+    ports:
+      - '8080:15672'
+      - '5672:5672'
+
+  redis:
+    image: redis
+    command: redis-server --appendonly yes --port 6379
