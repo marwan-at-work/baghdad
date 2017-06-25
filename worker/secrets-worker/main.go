@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net"
-	"os"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -55,7 +54,7 @@ func consume(d amqp.Delivery, w *worker.Worker) {
 	logger := worker.NewLogger(sj.ProjectName, "", w)
 	logger.Log("adding secret")
 
-	dc, err := docker.NewClient(os.Getenv("DOCKER_REMOTE_API_URL"), "1.29", nil, nil)
+	dc, err := docker.NewEnvClient()
 	if err != nil {
 		logger.Loglnf("could not get docker client: %v", err)
 		d.Ack(false)

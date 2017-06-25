@@ -131,6 +131,8 @@ services:
     environment:
       - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
       - REDIS_URL=redis:6379
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     deploy:
       mode: global
       restart_policy:

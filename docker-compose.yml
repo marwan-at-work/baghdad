@@ -7,6 +7,7 @@ services:
     volumes:
       - ".:/go/src/github.com/marwan-at-work/baghdad"
       - "./.env:/run/secrets/baghdad-vars"
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
       - REDIS_URL=redis:6379
@@ -93,6 +94,7 @@ services:
     volumes:
       - ".:/go/src/github.com/marwan-at-work/baghdad"
       - "./.env:/run/secrets/baghdad-vars"
+      - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - rabbitmq
       - redis

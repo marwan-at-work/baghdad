@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 
 	"github.com/docker/docker/api/types"
 	docker "github.com/docker/docker/client"
@@ -22,7 +21,7 @@ func GetProjectServiceLogs(w http.ResponseWriter, r *http.Request) {
 	// traefik listens for this content type to push streams.
 	w.Header().Set("Content-Type", "text/event-stream")
 
-	c, err := docker.NewClient(os.Getenv("DOCKER_REMOTE_API_URL"), "1.29", nil, nil)
+	c, err := docker.NewEnvClient()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintf(w, "could not get docker client: %v\n", err)

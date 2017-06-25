@@ -1,7 +1,5 @@
 package main
 
 func getRequiredVars() []string {
-	return []string{
-		"DOCKER_REMOTE_API_URL",
-	}
+	return []string{}
 }
