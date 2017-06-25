@@ -5,7 +5,7 @@ Scalable CI for microservices.
 
 ### Intro
 
-Baghdad runs within your cluster, builds, versions, and deploys your microservices, along with itself.
+Baghdad runs within your swarm cluster, builds, versions, and deploys your microservices, along with itself.
 
 ### Highlights
 
@@ -16,6 +16,7 @@ Baghdad runs within your cluster, builds, versions, and deploys your microservic
 - Automatically extract files from built images and push them as artifacts to github releases.
 - Monitor your builds from the CLI.
 - Monitor your app logs from the CLI.
+- Check Pull Requests' build status with a simple UI.
 
 ### Status
 
@@ -25,7 +26,7 @@ Baghdad runs within your cluster, builds, versions, and deploys your microservic
 
 1. Make sure you have a working Baghdad ecosystem, and that your Github Webhook is properly setup (see Deploy To Production).
 
-2. Create a Dockerfile in your root folder. 
+2. Create a Dockerfile in your root folder.
 
 3. Enjoy : )
 
@@ -102,7 +103,7 @@ Baghdad runs within your cluster, builds, versions, and deploys your microservic
         --web
     ```
 
-4. Navigate to your Route53 or DNS provider and route `*.YOUR_DOMAIN.COM` to the IP address where Traefik is deployed. 
+4. Navigate to your Route53 or DNS provider and route `*.YOUR_DOMAIN.COM` to the IP address where Traefik is deployed.
 
 5. From the Baghdad repo, run `bag generate stack --env prod --host YOUR_DOMAIN.COM --version <pick-ur-release-tag>`
 
@@ -121,14 +122,14 @@ BAGHDAD_DOMAIN_NAME=<DOMAIN_NAME> # example.com NOT www.example.com.
 
 8. run `docker stack deploy --compose-file stack.yml baghdad_prod`
 
-9. Create a github hook that points to `https://master-prod-baghdad-api.YOUR_DOMAIN.COM/hooks/github`. The passcode is `baghdad` (required). Make sure to disable SSL, if it's a self signed certificate. 
+9. Create a github hook that points to `https://master-prod-baghdad-api.YOUR_DOMAIN.COM/hooks/github`. The passcode is `baghdad` (required). Make sure to disable SSL, if it's a self signed certificate.
 
 10. Say a prayer ☪☮ℰ✡☥☯✝
 
 ### Development
 
-Baghdad consists of many services. You can instantiate all of them or any of them. The easiest way to do that, 
-is through the `docker-compose.yml` file (not to be confused with `stack-compose.yml`). Each service defined in that file is geared for development mode. You only need to make sure you have a `.env` file in the root direcory with the same settings as `baghdad-vars` in the Deploy to Production section. 
+Baghdad consists of many services. You can instantiate all of them or any of them. The easiest way to do that,
+is through the `docker-compose.yml` file (not to be confused with `stack-compose.yml`). Each service defined in that file is geared for development mode. You only need to make sure you have a `.env` file in the root direcory with the same settings as `baghdad-vars` in the Deploy to Production section.
 
 ### Roadmap
 
