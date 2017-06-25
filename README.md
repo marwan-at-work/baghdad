@@ -129,8 +129,30 @@ BAGHDAD_DOMAIN_NAME=<DOMAIN_NAME> # example.com NOT www.example.com.
 
 Baghdad consists of many services. You can instantiate all of them or any of them. The easiest way to do that,
 is through the `docker-compose.yml` file (not to be confused with `stack-compose.yml`). Each service defined in that file is geared for development mode. You only need to make sure you have a `.env` file in the root direcory with the same settings as `baghdad-vars` in the Deploy to Production section.
+Make sure to have `BAGHDAD_DOMAIN_NAME=localhost`
 
-For deployments, make sure your your local docker daemon is in swarm mode.
+Make sure your your local docker daemon is in swarm mode.
+
+Also, make sure you deploy traeffik as a swarm service with a different port than 80, and that's where you can test deployed projects:
+
+```
+docker service create \
+    --name traefik \
+    --detach=false \
+    --constraint=node.role==manager \
+    --publish 3456:80 --publish 9090:8080 \
+    --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock \
+    --network traefik-net \
+    traefik:v1.3.0-rc3 \
+    --docker \
+    --docker.swarmmode \
+    --docker.domain=traefik \
+    --docker.watch \
+    --logLevel=DEBUG \
+    --web
+```
+
+Note that that I'm binding `3456` to the main router, and `9090` for the traefik web UI, because the Baghdad rabbitmq binds `8080`. 
 
 ### Roadmap
 
