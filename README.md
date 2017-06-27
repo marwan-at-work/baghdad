@@ -1,11 +1,19 @@
 # Baghdad
 
-Scalable CI for microservices.
+Scalable CI for micro-services.
 --
 
 ### Intro
 
-Baghdad runs within your swarm cluster, builds, versions, and deploys your microservices, along with itself.
+What if you could build 10, 50, 100, Docker images simultaneously at the same speed of building one image?
+
+What if all of those images are in one repo, because your project is micro-services oriented?
+
+What if you have more than one repo, with many Dockerfiles inside each one?
+
+Baghdad runs within your swarm cluster, builds, versions, and deploys your micro-services, along with itself.
+
+Baghdad also leverages every node within your cluster to parallelize Docker image builds.
 
 ### Highlights
 
@@ -152,7 +160,7 @@ docker service create \
     --web
 ```
 
-Note that that I'm binding `3456` to the main router, and `9090` for the traefik web UI, because the Baghdad rabbitmq binds `8080`. 
+Note that that I'm binding `3456` to the main router, and `9090` for the traefik web UI, because the Baghdad rabbitmq binds `8080`.
 
 ### Roadmap
 
