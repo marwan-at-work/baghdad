@@ -26,6 +26,10 @@ services:
       - AMQP_URL=amqp://baghdad:dev@rabbitmq:5672
       - LOG_LEVEL=DEBUG
       - REDIS_URL=redis:6379
+      - BAGHDAD_DOMAIN_NAME=localhost
+      - GO_ENV=development
+      - BAGHDAD_BUILD_BRANCH=fake
+      - BAGHDAD_BUILD_ENV=fake
     volumes:
       - ".:/go/src/github.com/marwan-at-work/baghdad"
       - "./.env:/run/secrets/baghdad-vars"
@@ -58,6 +62,7 @@ services:
       - LOG_LEVEL=DEBUG
       - POST_DEPLOY_ADDR=post-deploy:50051
       - REDIS_URL=redis:6379
+      - BAGHDAD_DOMAIN_NAME=localhost
     volumes:
       - ".:/go/src/github.com/marwan-at-work/baghdad"
       - "./.env:/run/secrets/baghdad-vars"

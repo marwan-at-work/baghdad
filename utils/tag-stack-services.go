@@ -33,11 +33,18 @@ func TagStackServices(
 			s.Image = s.Image + ":" + tag
 		}
 
-		if envs, ok := s.Environment.([]interface{}); ok {
-			envs = append(envs, fmt.Sprintf("BAGHDAD_BUILD_VERSION=%v", tag))
+		if envs, ok := s.Environment.([]interface{}); ok || s.Environment == nil {
+			envs = append(
+				envs,
+				fmt.Sprintf("BAGHDAD_BUILD_VERSION=%v", tag),
+				fmt.Sprintf("BAGHDAD_BUILD_BRANCH=%v", branch),
+				fmt.Sprintf("BAGHDAD_BUILD_ENV=%v", env),
+			)
 			s.Environment = envs
 		} else if envDic, ok := s.Environment.(map[string]interface{}); ok {
 			envDic["BAGHDAD_BUILD_VERSION"] = tag
+			envDic["BAGHDAD_BUILD_BRANCH"] = branch
+			envDic["BAGHDAD_BUILD_ENV"] = env
 			s.Environment = envDic
 		}
 

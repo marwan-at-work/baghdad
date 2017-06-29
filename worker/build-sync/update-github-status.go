@@ -19,14 +19,31 @@ func updateGithubStatus(repoOwner, repoName, sha, statusState, logID string) err
 		State:       &statusState,
 		Context:     &statusCtx,
 		Description: &statusDescription,
-		TargetURL:   getTargetURL(logID),
+		TargetURL:   getTargetURL(repoOwner, logID),
 	})
 
 	return err
 }
 
-func getTargetURL(logID string) *string {
-	url := fmt.Sprintf("http://master-cd-baghdad-api.marwan.io/status/%v", logID)
+func getTargetURL(repoOwner, logID string) *string {
+	isDev := os.Getenv("GO_ENV") == "development"
+	var url string
+	if isDev {
+		url = fmt.Sprintf("http://localhost:3000/projects/%v/logs/%v", repoOwner, logID)
+	} else {
+		branch := os.Getenv("BAGHDAD_BUILD_BRANCH")
+		env := os.Getenv("BAGHDAD_BUILD_ENV")
+		domain := os.Getenv("BAGHDAD_DOMAIN_NAME")
+
+		url = fmt.Sprintf(
+			"http://%v-%v-baghdad-api.%v/projects/%v/logs/%v",
+			branch,
+			env,
+			domain,
+			repoOwner,
+			logID,
+		)
+	}
 
 	return &url
 }
