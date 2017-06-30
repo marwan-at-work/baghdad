@@ -27,8 +27,11 @@ func deploy(c *cli.Context) (err error) {
 		return errors.New("missing branch")
 	}
 
-	// hard coded for now.
-	owner := "marwan-at-work"
+	owner := c.String("owner")
+	if owner == "" {
+		return errors.New("missing owner")
+	}
+
 	apiURL, err := getAPIURL()
 	if err != nil {
 		return err

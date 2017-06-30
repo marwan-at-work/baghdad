@@ -101,6 +101,11 @@ func main() {
 						Usage:   "the branch you want to deploy from",
 						Aliases: []string{"B"},
 					},
+					&cli.StringFlag{
+						Name:    "owner",
+						Usage:   "the github username",
+						Aliases: []string{"O"},
+					},
 				},
 			},
 		},
