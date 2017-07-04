@@ -25,9 +25,12 @@ var pc = map[string]deployCh{}
 var m sync.Mutex
 
 func deploy(w *worker.Worker, ch deployCh) {
-	for dj := range ch {
+	for {
+		dj, ok := <-ch
+		if !ok {
+			break
+		}
 		logger := worker.NewLogger(dj.Baghdad.Project, dj.LogID, w)
-		logger.Log("starting deploy job")
 
 		f, err := getStackCompose(utils.GetGithub(os.Getenv("ADMIN_TOKEN")), stackComposeGetOpts{
 			Ctx:      context.Background(),
@@ -121,7 +124,6 @@ func consume(d amqp.Delivery, w *worker.Worker) {
 		go deploy(w, ch)
 	}
 	m.Unlock()
-
 	ch <- dj
 }
 

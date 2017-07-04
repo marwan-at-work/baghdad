@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
@@ -85,6 +86,19 @@ func buildFromPush(ctx context.Context, b baghdad.BuildJob, logger *worker.Logge
 			rc.Close()
 
 			return nil
+		}
+	}
+
+	// clean up previous builds of this service. But keep the current one, for future builds to be cached.
+	imgPrefix := fmt.Sprintf("%v/%v-%v:", dockerOrg, r, service.Name)
+	imgs, _ := c.ImageList(ctx, types.ImageListOptions{})
+	for _, img := range imgs {
+		for _, t := range img.RepoTags {
+			if (strings.HasPrefix(t, imgPrefix) && t != imgName) || t == "<none>:<none>" {
+				c.ImageRemove(ctx, img.ID, types.ImageRemoveOptions{
+					Force: true,
+				})
+			}
 		}
 	}
 
