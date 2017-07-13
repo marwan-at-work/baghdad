@@ -114,6 +114,6 @@ func main() {
 
 	go listen(msgs, w)
 
-	fmt.Println("[x] - Listening for messages on the deploy-sync queue")
+	fmt.Println("[x] - Listening for messages on the build-sync queue")
 	<-make(chan bool) // wait forever
 }
