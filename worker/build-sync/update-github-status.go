@@ -25,6 +25,7 @@ func updateGithubStatus(repoOwner, repoName, sha, statusState, logID string) err
 	return err
 }
 
+// gets the URL that a GitHub Pull Request will send you to to get your build logs.
 func getTargetURL(repoOwner, logID string) *string {
 	isDev := os.Getenv("GO_ENV") == "development"
 	var url string
