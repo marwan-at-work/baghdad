@@ -1,1 +1,15 @@
+.git
 .DS_Store
+main
+.env
+api/api
+worker/build-worker/build-worker
+worker/deploy-worker/deploy-worker
+worker/event-worker/event-worker
+worker/deploy-sync/deploy-sync
+worker/post-deploy/post-deploy
+worker/secrets-worker/secrets-worker
+worker/build-sync/build-sync
+worker/docker-sweeper/docker-sweeper
+dist
+bootstrap.tf
