@@ -9,7 +9,7 @@ import (
 	"github.com/marwan-at-work/baghdad/bus"
 )
 
-func setLogLevel() {
+func init() {
 	logrus.SetFormatter(&LogFormatter{})
 	level := os.Getenv("LOG_LEVEL")
 

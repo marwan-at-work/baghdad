@@ -14,7 +14,6 @@ type Worker struct {
 
 // NewWorker takes in a queue name and returns a Worker struct
 func NewWorker(amqpURL string) (w *Worker, err error) {
-	setLogLevel()
 	if amqpURL == "" {
 		err = errors.New("AMQP_URL cannot be empty")
 		return
