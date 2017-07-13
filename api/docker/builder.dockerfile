@@ -1,5 +1,5 @@
 # BUILD
-FROM golang:1.8.1 as builder
+FROM golang:1.8.1 AS builder
 
 MAINTAINER marwan.sameer@gmail.com
 
