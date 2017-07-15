@@ -42,7 +42,7 @@ func build(w *worker.Worker, ch buildCh) {
 			}
 
 			if eventErr := sendBuildEvent(bj, eventType, nextTag, w); eventErr != nil {
-				logger.Loglnf("err: could not send build-event: %v", err)
+				logger.Loglnf("err: could not send build-event: %v", eventErr)
 			}
 		} else if bj.Type == baghdad.PullRequestEvent {
 			err = sendPRBuildJob(ctx, bj, w, ch, logger)
@@ -58,7 +58,9 @@ func build(w *worker.Worker, ch buildCh) {
 
 		bj.NextTag = nextTag
 		rawBj, _ := baghdad.EncodeBuildJob(bj)
-		w.Broadcast("remove-repo", "", rawBj)
+		if removeRepooErr := w.Broadcast("remove-repo", "", rawBj); removeRepooErr != nil {
+			logger.Loglnf("could not remove %v repo: %v", bj.RepoName, removeRepooErr)
+		}
 		cancel()
 	}
 }
@@ -88,15 +90,17 @@ func listen(msgs <-chan amqp.Delivery, w *worker.Worker) {
 	for d := range msgs {
 		go consume(d, w)
 	}
+
+	// here, we should refactor to reconnect.
+	// Either re run some functions that will start another goroutine to listen on a new channel.
+	// or abstract everything and send a custom channel that will never close and forwards rabbitmq ch.
+	w.Close()
+	// go connect()
 }
 
-func main() {
-	godotenv.Load("/run/secrets/baghdad-vars")
-	utils.ValidateEnvVars(getRequiredVars()...)
+func connect() {
 	w, err := worker.NewWorker(utils.GetAMQPURL())
 	utils.FailOnError(err, "could not connect to rabbitmq")
-	defer w.Close()
-	ensureBuildPath()
 
 	err = w.EnsureQueues("build-sync", "build")
 	utils.FailOnError(err, "could not declare queue")
@@ -115,5 +119,13 @@ func main() {
 	go listen(msgs, w)
 
 	fmt.Println("[x] - Listening for messages on the build-sync queue")
+}
+
+func main() {
+	godotenv.Load("/run/secrets/baghdad-vars")
+	utils.ValidateEnvVars(getRequiredVars()...)
+	ensureBuildPath()
+
+	go connect()
 	<-make(chan bool) // wait forever
 }

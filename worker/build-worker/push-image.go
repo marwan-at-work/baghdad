@@ -25,7 +25,7 @@ func loginToDocker(ctx context.Context, authConfig types.AuthConfig, c *docker.C
 	if err != nil && retries > 0 {
 		fmt.Println("could not login to docker, retrying in one second. Err:", err)
 		time.Sleep(time.Second)
-		err = loginToDocker(ctx, authConfig, c, retries)
+		err = loginToDocker(ctx, authConfig, c, retries-1)
 	}
 
 	return err
