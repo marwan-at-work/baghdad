@@ -68,7 +68,7 @@ qa = "manual"
 [branches]
 
 [branches.master]
-version = "0.0.1"
+version = "0.0.2"
 
 
 # [post-deploy]
