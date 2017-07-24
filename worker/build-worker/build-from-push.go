@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
@@ -95,9 +96,25 @@ func buildFromPush(ctx context.Context, b baghdad.BuildJob, logger *worker.Logge
 	for _, img := range imgs {
 		for _, t := range img.RepoTags {
 			if (strings.HasPrefix(t, imgPrefix) && t != imgName) || t == "<none>:<none>" {
-				c.ImageRemove(ctx, img.ID, types.ImageRemoveOptions{
-					Force: true,
-				})
+				removeChan := make(chan struct{}, 1)
+				imageRemovalContext, cancelImgRemove := context.WithCancel(ctx)
+				go func() {
+					c.ImageRemove(imageRemovalContext, img.ID, types.ImageRemoveOptions{
+						Force: true,
+					})
+
+					removeChan <- struct{}{}
+				}()
+
+				select {
+				case <-removeChan:
+					cancelImgRemove()
+				case <-time.After(time.Second * 3):
+					go func() {
+						time.Sleep(time.Second * 7)
+						cancelImgRemove()
+					}()
+				}
 			}
 		}
 	}
